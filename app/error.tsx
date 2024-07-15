@@ -2,10 +2,19 @@
 
 import React from 'react'
 
-const ErrorPage = () => {
+interface Props{
+    error : Error
+    reset: () => void
+}
+
+const ErrorPage = ({error , reset} : Props) => {
   return (
-    <div>
+   <>
+     <div>
        An upected error occured  </div>
+
+       <button onClick={() => reset()}>Retry</button>
+   </>
   )
 }
 
