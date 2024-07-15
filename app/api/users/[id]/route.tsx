@@ -1,5 +1,8 @@
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import { json } from "stream/consumers";
+import {z} from 'zod';
+import schema from "../schema";
 
 // interface Props{
 //     params : {id:number}
@@ -11,4 +14,26 @@ export function GET(request: NextRequest ,
         if (params.id>10) 
         return NextResponse.json({error: 'usernot found'}, {status: 404})
         return NextResponse.json({ id: 1, name: 'ammu'})
+}
+
+
+export async function PUT(request: NextRequest, {params}: {params : {id:number}}){
+
+    const body = await request.json()
+    const validation = schema.safeParse(body)
+    if(!validation.success)
+        return NextResponse.json(validation.error?.errors, {status:400})
+
+    if(params.id>10)
+        return NextResponse.json({error: 'user not found'}, {status: 400})
+
+    return NextResponse.json({id:1, name:body.name})
+}
+
+
+export function DELETE (request: NextRequest, {params}: {params : {id:number}}){
+    if(params.id>10)
+        return NextResponse.json({error: 'user not found'}, {status:400})
+
+    return NextResponse.json({})
 }
